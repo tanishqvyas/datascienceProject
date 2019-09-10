@@ -29,14 +29,26 @@ class Data:
 	column_list3 = ['internet','freetime','guardian']
 
 	#Dividing the columns based on what operation needs to be applied
-	column_mean = ['Medu','Fedu','Mjob','Fjob','famrel','freetime','goout','health','traveltime']
-	column_median = ['famsize','studytime','famsup','failures','Dalc','Walc']
-	column_mode = ['internet','guardian','Pstatus','reason','romantic']
+	column_mean = ['Medu','Fedu','famrel','freetime','goout','health','traveltime']
+	column_median = ['studytime','famsup','failures','Dalc','Walc']
+	column_mode = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
 
 
 	# Init method
 	def __init__(self):
 		pass
+
+	# Function to save modified dataset as a new version of DataFrame
+	def save_file(self, df, directory_path, data_path ):
+
+		if os.path.exists(directory_path):
+			shutil.rmtree(directory_path)
+
+		os.mkdir(directory_path) # making new directory to save newversion
+		df.to_csv(data_path)
+		print("done")
+
+
 
 # Introducing NaNs
 
@@ -70,24 +82,19 @@ class Data:
 		df.fillna("NaN", inplace = True)
 
 		# Saving the new dataset
-
-		if os.path.exists(self.nan_directory_path):
-			shutil.rmtree(self.nan_directory_path)
-
-		os.mkdir(self.nan_directory_path) # making new directory to save newversion
-		df.to_csv(self.nan_data_path)
+		self.save_file(df, self.nan_directory_path, self.nan_data_path)
         
 #Replacing NaNs
     
     #Functions to replace NaNs
 	def rep_NaN_mean(self,df,col):
-		df.fillna(df.mean()[col])
+		df.fillna(df.mean()[col], inplace = True)
         
 	def rep_NaN_median(self,df,col):
-		df.fillna(df.median()[col])
+		df.fillna(df.median()[col], inplace = True)
         
 	def rep_NaN_mode(self,df,col):
-		df.fillna(df.mode()[col])
+		df.fillna(df.mode()[col], inplace = True)
         
     #Function to remove the NaNs
 	def replace_nan(self):
@@ -101,12 +108,7 @@ class Data:
 		self.rep_NaN_mode(df,self.column_mode)
         
     	# Saving the new dataset
-		if os.path.exists(self.cleaned_directory_path):
-			shutil.rmtree(self.cleaned_directory_path)
-
-		os.mkdir(self.cleaned_directory_path) # making new directory to save new version
-		df.to_csv(self.cleaned_data_path)
-		print("done") 
+		self.save_file(df, self.cleaned_directory_path, self.cleaned_data_path)
 
 
 
