@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 import shutil
+import math
 
 class Data:
 
@@ -96,7 +97,7 @@ class Data:
 	def rep_NaN_mode(self,df,col):
 		df.fillna(df.mode()[col], inplace = True)
         
-    #Function to remove the NaNs
+    # Function to remove the NaNs
 	def replace_nan(self):
         
 		# Creating Data Frame
@@ -109,6 +110,42 @@ class Data:
         
     	# Saving the new dataset
 		self.save_file(df, self.cleaned_directory_path, self.cleaned_data_path)
+
+	# Function to return Q1 Q2 or Q3
+	def get_quartile_value(self,data_list, n, quartile_ratio):
+
+		if (n+1)*quartile_ratio == int((n+1)*quartile_ratio):
+			return data_list[(n+1)*quartile_ratio]
+
+		else:
+			return ( data_list[math.ceil((n+1)*quartile_ratio)] + data_list[math.floor((n+1)*quartile_ratio)] ) / 2
+
+	# Function to find median
+	def get_IQR(self, data_list):
+
+		# finding number of elements
+		num_of_elements = len(data_list)
+
+		# fetching Q1, Q2 & Q3 values
+		Q1 = get_quartile_value(data_list,num_of_elements,0.25)
+		Q3 = get_quartile_value(data_list,num_of_elements,0.75)
+
+		return Q3 - Q1
+
+
+	# Function to find bin_size using Freedman-Diaconis formula
+	def get_bin_size(self,data_list, n):
+
+		bin_size = (2 * get_IQR(data_list)) / (math.pow(n, 1/3))
+		return math.ceil(bin_size)
+
+	# Function to calculate num of classes
+	def get_count_classes(self, data_list):
+
+		num_of_classes = (max(data_list)-min(data_list)) / self.get_bin_size(data_list, len(data_list))
+		return math.ceil(num_of_classes)
+
+
 
 
 
