@@ -8,29 +8,37 @@ import shutil
 class Data:
 
 	# Class variables >>>>
-#Introducing NaNs
+
 	# Initial data path
 	initial_data_path = os.path.join("visualization","student","initial","student-por.csv")
 	
 	# NaN value & directory path
 	nan_directory_path = os.path.join("visualization","student","nan")
 	nan_data_path = os.path.join("visualization","student","nan","student-por.csv")
+
+	# NaN value & directory path
+	cleaned_directory_path = os.path.join("visualization","student","cleaned")
+	cleaned_data_path = os.path.join("visualization","student","cleaned","student-por-postclean.csv")
 	
 	# Percentage NaN
 	percentage_nan = [0.03, 0.015, 0.010] # The variable to keep track of what percent of data is modified to NaN
 
 	# Columns list 
-
 	column_list1 = ['Pstatus','Medu','Fedu','Mjob','Fjob','reason','failures','romantic','famrel','Dalc','Walc']
 	column_list2 = ['famsize','traveltime','studytime','goout','health','famsup']
 	column_list3 = ['internet','freetime','guardian']
 
+	#Dividing the columns based on what operation needs to be applied
+	column_mean = ['Medu','Fedu','Mjob','Fjob','famrel','freetime','goout','health','traveltime']
+	column_median = ['famsize','studytime','famsup','failures','Dalc','Walc']
+	column_mode = ['internet','guardian','Pstatus','reason','romantic']
 
 
 	# Init method
 	def __init__(self):
 		pass
 
+# Introducing NaNs
 
 	# Function to add NaN
 	def add_nan(self,df,column_list,percentage):
@@ -44,7 +52,6 @@ class Data:
 		    add_miss_rat = (percentage - ori_rat) / (1 - ori_rat)
 		    vals_to_nan = df[col].dropna().sample(frac=add_miss_rat).index
 		    df.loc[vals_to_nan, col] = np.NaN
-
 
 
 
@@ -69,20 +76,8 @@ class Data:
 
 		os.mkdir(self.nan_directory_path) # making new directory to save newversion
 		df.to_csv(self.nan_data_path)
-		print("done") 
         
 #Replacing NaNs
-	# Redefining Initial data path
-	initial_data_path = os.path.join("visualization","student","nan","student-por.csv")
-    
-	# NaN value & directory path
-	cleaned_directory_path = os.path.join("visualization","student","cleaned")
-	cleaned_data_path = os.path.join("visualization","student","cleaned","student-por-postclean.csv")
-    
-    #Dividing the columns based on what operation needs to be applied
-	column_mean = ['Medu','Fedu','Mjob','Fjob','famrel','freetime','goout','health','traveltime']
-	column_median = ['famsize','studytime','famsup','failures','Dalc','Walc']
-	column_mode = ['internet','guardian','Pstatus','reason','romantic']
     
     #Functions to replace NaNs
 	def rep_NaN_mean(self,df,col):
@@ -98,17 +93,16 @@ class Data:
 	def replace_nan(self):
         
 		# Creating Data Frame
-		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+		df = pd.DataFrame(pd.read_csv(self.nan_data_path))
         
         #Calling rem_NaN functions 
-		rep_NaN_mean(df,self.column_mean)
-		rep_NaN_median(df,self.column_median)
-		rep_NaN_mode(df,self.column_mode)
+		self.rep_NaN_mean(df,self.column_mean)
+		self.rep_NaN_median(df,self.column_median)
+		self.rep_NaN_mode(df,self.column_mode)
         
-    # Saving the new dataset
-
-		if os.path.exists(self.nan_directory_path):
-			shutil.rmtree(self.nan_directory_path)
+    	# Saving the new dataset
+		if os.path.exists(self.cleaned_directory_path):
+			shutil.rmtree(self.cleaned_directory_path)
 
 		os.mkdir(self.cleaned_directory_path) # making new directory to save new version
 		df.to_csv(self.cleaned_data_path)
