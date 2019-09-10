@@ -20,9 +20,9 @@ class Data:
 
 	# Columns list 
 
-	column_list1 = ['Pstatus','Medu','Fedu','Mjob','Fjob','reason','paid','romantic','famrel','Dalc']
+	column_list1 = ['Pstatus','Medu','Fedu','Mjob','Fjob','reason','failures','romantic','famrel','Dalc','Walc']
 	column_list2 = ['famsize','traveltime','studytime','goout','health','famsup']
-	column_list3 = ['activities','internet','freetime','guardian']
+	column_list3 = ['internet','freetime','guardian']
 
 
 
