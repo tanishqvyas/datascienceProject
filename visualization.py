@@ -11,3 +11,4 @@ The class contains following functions
 
 data = manipulator.Data()
 data.introduce_nan()
+data.replace_nan()

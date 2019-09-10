@@ -8,7 +8,7 @@ import shutil
 class Data:
 
 	# Class variables >>>>
-
+#Introducing NaNs
 	# Initial data path
 	initial_data_path = os.path.join("visualization","student","initial","student-por.csv")
 	
@@ -69,6 +69,49 @@ class Data:
 
 		os.mkdir(self.nan_directory_path) # making new directory to save newversion
 		df.to_csv(self.nan_data_path)
+		print("done") 
+        
+#Replacing NaNs
+	# Redefining Initial data path
+	initial_data_path = os.path.join("visualization","student","nan","student-por.csv")
+    
+	# NaN value & directory path
+	cleaned_directory_path = os.path.join("visualization","student","cleaned")
+	cleaned_data_path = os.path.join("visualization","student","cleaned","student-por-postclean.csv")
+    
+    #Dividing the columns based on what operation needs to be applied
+	column_mean = ['Medu','Fedu','Mjob','Fjob','famrel','freetime','goout','health','traveltime']
+	column_median = ['famsize','studytime','famsup','failures','Dalc','Walc']
+	column_mode = ['internet','guardian','Pstatus','reason','romantic']
+    
+    #Functions to replace NaNs
+	def rep_NaN_mean(self,df,col):
+		df.fillna(df.mean()[col])
+        
+	def rep_NaN_median(self,df,col):
+		df.fillna(df.median()[col])
+        
+	def rep_NaN_mode(self,df,col):
+		df.fillna(df.mode()[col])
+        
+    #Function to remove the NaNs
+	def replace_nan(self):
+        
+		# Creating Data Frame
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+        
+        #Calling rem_NaN functions 
+		rep_NaN_mean(df,self.column_mean)
+		rep_NaN_median(df,self.column_median)
+		rep_NaN_mode(df,self.column_mode)
+        
+    # Saving the new dataset
+
+		if os.path.exists(self.nan_directory_path):
+			shutil.rmtree(self.nan_directory_path)
+
+		os.mkdir(self.cleaned_directory_path) # making new directory to save new version
+		df.to_csv(self.cleaned_data_path)
 		print("done") 
 
 
