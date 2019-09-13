@@ -51,7 +51,7 @@ class Data:
 			shutil.rmtree(directory_path)
 
 		os.mkdir(directory_path) # making new directory to save newversion
-		df.to_csv(data_path)
+		df.to_csv(data_path,index = False)
 		print("done")
 
 	# Function to replace yes with 1 and no with 0 respectively
@@ -106,10 +106,10 @@ class Data:
     
     #Functions to replace NaNs
 	def rep_NaN_mean(self,df,col):
-		df.fillna(df.mean()[col], inplace = True)
+		df.fillna(df.mean()[col].round(0), inplace = True)
         
 	def rep_NaN_median(self,df,col):
-		df.fillna(df.median()[col], inplace = True)
+		df.fillna(df.median()[col].round(0), inplace = True)
         
 	def rep_NaN_mode(self,df,col):
 		df.fillna(df.mode()[col], inplace = True)
