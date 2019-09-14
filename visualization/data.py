@@ -12,15 +12,15 @@ class Data:
 
 	# Initial data path
 	initial_directory_path = os.path.join("visualization","student","initial")
-	initial_data_path = os.path.join("visualization","student","initial","student-por.csv")
+	initial_data_path = os.path.join(initial_directory_path,"student-por.csv")
 	
 	# NaN value & directory path
 	nan_directory_path = os.path.join("visualization","student","nan")
-	nan_data_path = os.path.join("visualization","student","nan","student-por.csv")
+	nan_data_path = os.path.join(nan_directory_path,"student-por.csv")
 
 	# NaN value & directory path
 	cleaned_directory_path = os.path.join("visualization","student","cleaned")
-	cleaned_data_path = os.path.join("visualization","student","cleaned","student-por-postclean.csv")
+	cleaned_data_path = os.path.join(cleaned_directory_path,"student-por-postclean.csv")
 	
 	# Percentage NaN
 	percentage_nan = [0.03, 0.015, 0.010] # The variable to keep track of what percent of data is modified to NaN
