@@ -11,6 +11,7 @@ class Data:
 	# Class variables >>>>
 
 	# Initial data path
+	initial_directory_path = os.path.join("visualization","student","initial")
 	initial_data_path = os.path.join("visualization","student","initial","student-por.csv")
 	
 	# NaN value & directory path
@@ -35,20 +36,36 @@ class Data:
 	column_mode = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
 
 
+
+
+
 	# Init method
 	def __init__(self):
-		pass
+		self.boolean_filter()
+
 
 	# Function to save modified dataset as a new version of DataFrame
-	def save_file(self, df, directory_path, data_path ):
+	def save_file(self, df, directory_path, data_path):
 
 		if os.path.exists(directory_path):
 			shutil.rmtree(directory_path)
 
 		os.mkdir(directory_path) # making new directory to save newversion
-		df.to_csv(data_path)
+		df.to_csv(data_path,index = False)
 		print("done")
 
+	# Function to replace yes with 1 and no with 0 respectively
+	def boolean_filter(self):
+
+		# Creating Data Frame
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+
+		# Replacing values
+		df.replace(to_replace ="yes", value = 1, inplace = True)
+		df.replace(to_replace ="no", value = 0, inplace = True)
+
+		# saving file
+		self.save_file(df, self.initial_directory_path, self.initial_data_path)
 
 
 # Introducing NaNs
@@ -89,10 +106,10 @@ class Data:
     
     #Functions to replace NaNs
 	def rep_NaN_mean(self,df,col):
-		df.fillna(df.mean()[col], inplace = True)
+		df.fillna(df.mean()[col].round(0), inplace = True)
         
 	def rep_NaN_median(self,df,col):
-		df.fillna(df.median()[col], inplace = True)
+		df.fillna(df.median()[col].round(0), inplace = True)
         
 	def rep_NaN_mode(self,df,col):
 		df.fillna(df.mode()[col], inplace = True)
@@ -146,6 +163,7 @@ class Data:
 		return math.ceil(num_of_classes)
 
 
+	# Graph plotters
 
 
 
