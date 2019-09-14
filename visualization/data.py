@@ -5,6 +5,8 @@ import pandas as pd
 import os
 import shutil
 import math
+import matplotlib.pyplot as plt
+import scipy.stats as ss
 
 class Data:
 
@@ -21,6 +23,8 @@ class Data:
 	# NaN value & directory path
 	cleaned_directory_path = os.path.join("visualization","student","cleaned")
 	cleaned_data_path = os.path.join(cleaned_directory_path,"student-por-postclean.csv")
+
+	# Path of folder to save plots
 	
 	# Percentage NaN
 	percentage_nan = [0.03, 0.015, 0.010] # The variable to keep track of what percent of data is modified to NaN
@@ -144,8 +148,8 @@ class Data:
 		num_of_elements = len(data_list)
 
 		# fetching Q1, Q2 & Q3 values
-		Q1 = get_quartile_value(data_list,num_of_elements,0.25)
-		Q3 = get_quartile_value(data_list,num_of_elements,0.75)
+		Q1 = self.get_quartile_value(data_list,num_of_elements,0.25)
+		Q3 = self.get_quartile_value(data_list,num_of_elements,0.75)
 
 		return Q3 - Q1
 
@@ -153,7 +157,7 @@ class Data:
 	# Function to find bin_size using Freedman-Diaconis formula
 	def get_bin_size(self,data_list, n):
 
-		bin_size = (2 * get_IQR(data_list)) / (math.pow(n, 1/3))
+		bin_size = (2 * self.get_IQR(data_list)) / (math.pow(n, 1/3))
 		return math.ceil(bin_size)
 
 	# Function to calculate num of classes
@@ -163,8 +167,133 @@ class Data:
 		return math.ceil(num_of_classes)
 
 
-	# Graph plotters
+	# Pre-requisites for plotters>>>>>>>>>
 
+	# Functon to save the visulizaton graphs
+	def save_plot(self):
+		pass
+
+	# Function to fetch column as a list
+	def fetch_col(self, column_title):
+		
+		#change >>>> filepath
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+
+		# Convertingthe df column to list
+		store_list = list(df[column_title].tolist())
+		store_list.sort() 
+		return store_list
+
+	# Functon to extract labels and their counts from a column
+	def structure_data(self,data_list):
+		
+		# Extract unique fields
+		label_set = list(set(data_list))
+
+		# Get count for each field
+		label_count = [data_list.count(i) for i in label_set]
+
+		return label_set, label_count
+
+	# Graph plotters>>>>>>>>>>>
+
+	# Function to plot pie-chart
+	def plot_piechart(self, column_title, title):
+
+		# Pre processing
+		data_list = self.fetch_col(column_title)
+
+		# Extracting labels and respective values
+		label_set, label_count = self.structure_data(data_list)
+
+		# Plottng
+		plt.pie(label_count, labels=label_set, shadow=False, startangle=90, autopct='%.1f%%')
+		plt.title(title)
+		#plt.tight_layout()
+		plt.axis('equal') # Equal aspect ratio ensures that pie is drawn as a circle.
+		plt.show()
+
+	# Functon to plot bar graph
+	def plot_bargraph(self, column_title, title, xlabel, ylabel, isVertcal = False):
+
+		# Pre processing
+		data_list = self.fetch_col(column_title)
+
+		# Extracting labels and respective values
+		label_set, label_count = self.structure_data(data_list)
+		
+		# To use template styling
+		plt.style.use('seaborn')
+
+		if not isVertcal:
+			plt.barh(label_set, label_count)
+			plt.ylabel(xlabel)
+			plt.xlabel(ylabel)
+		else:
+			plt.bar(label_set, label_count)
+			plt.xlabel(xlabel)
+			plt.ylabel(ylabel)
+
+
+		
+
+		plt.title(title)
+		#some padding it seems
+		plt.tight_layout()
+		plt.show()
+
+	# Function to plot histogram
+	def plot_histogram(self, column_title, title, xlabel, ylabel, plotCurve=False):
+		
+		# plotCurve variable is 1 if we wanna plot curve above histogram
+
+		# Pre processing
+		data_list = self.fetch_col(column_title)
+		
+		#  Fnding num of bins
+		num_of_bins = self.get_count_classes(data_list)
+
+		# To use template styling
+		plt.style.use('seaborn-whitegrid')
+
+		plt.title(title)
+		plt.xlabel(xlabel)
+		plt.ylabel(ylabel)
+
+		if plotCurve:
+			pass #todo
+
+
+		plt.hist(data_list, bins = num_of_bins, normed=True)
+		plt.show()
+
+
+		# Functon to plot Scatter Plot
+		def plot_scatterPlot(self):
+			pass
+
+
+"""
+Todo
+
+0. Change file path from intial to cleaned once cleaning is done
+1. Apply boolean filter after vsulization and maintain both versions
+2. Define save_plot
+3. Pie charts
+4. Histograms
+	- Add line plot feature on top of hist based on plotCurve's value
+	- Add a feature to plot it separately too if needed
+	- Add legends
+
+5. Bar Graphs
+	- Fix y axis scale representaton for horzontal and vice versa
+	- Add legends
+
+6. Defne Scatter Plot function
+
+7. Defne path to the folder to save plots
+8. Refactor code to overwrte files nstead of deleting folders
+"""
 
 
 
