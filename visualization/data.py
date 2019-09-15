@@ -30,6 +30,7 @@ class Data:
 	cleaned_data_path = os.path.join(cleaned_directory_path,filename)
 
 	# Path of folder to save plots
+	plot_directory_path = os.path.join("visualization","student","Plots")
 	
 	# Percentage NaN
 	percentage_nan = [0.03, 0.015, 0.010] # The variable to keep track of what percent of data is modified to NaN
@@ -241,7 +242,6 @@ class Data:
 
 
 		
-
 		plt.title(title)
 		#some padding it seems
 		plt.tight_layout()
@@ -272,18 +272,29 @@ class Data:
 		plt.hist(data_list, bins = num_of_bins, normed=True)
 		plt.show()
 
+	
+	# Functon to plot Scatter Plot
+	def plot_scatterPlot(self, column_title1, column_title2, title, xlabel, ylabel):
 
-		# Functon to plot Scatter Plot
-		def plot_scatterPlot(self):
-			pass
+		#pre processing
+		data_list1 = self.fetch_col(column_title1)
+		data_list2 = self.fetch_col(column_title2)
+
+
+		# plotting
+		plt.scatter(data_list1, data_list2, color='r')
+		plt.title(title)
+		plt.xlabel(xlabel)
+		plt.ylabel(ylabel)
+		plt.show()
+			
 
 
 """
 Todo
 
 0. Change file path from intial to cleaned once cleaning is done
-1. Apply boolean filter after vsulization and maintain both versions
-2. Define save_plot
+2. Define save_plot, to be done at the end
 3. Pie charts
 4. Histograms
 	- Add line plot feature on top of hist based on plotCurve's value
