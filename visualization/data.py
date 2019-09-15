@@ -11,18 +11,23 @@ import scipy.stats as ss
 class Data:
 
 	# Class variables >>>>
+	filename = "student-por.csv"
 
 	# Initial data path
 	initial_directory_path = os.path.join("visualization","student","initial")
-	initial_data_path = os.path.join(initial_directory_path,"student-por.csv")
-	
-	# NaN value & directory path
-	nan_directory_path = os.path.join("visualization","student","nan")
-	nan_data_path = os.path.join(nan_directory_path,"student-por.csv")
+	initial_data_path = os.path.join(initial_directory_path,filename)
+
+	# Boolean Filtered data path
+	boolean_filter_directory_path = os.path.join("visualization","student","filtered")
+	boolean_filter_data_path = os.path.join(boolean_filter_directory_path,filename)
 
 	# NaN value & directory path
+	nan_directory_path = os.path.join("visualization","student","nan")
+	nan_data_path = os.path.join(nan_directory_path,filename)
+
+	# Cleaned data & directory path
 	cleaned_directory_path = os.path.join("visualization","student","cleaned")
-	cleaned_data_path = os.path.join(cleaned_directory_path,"student-por-postclean.csv")
+	cleaned_data_path = os.path.join(cleaned_directory_path,filename)
 
 	# Path of folder to save plots
 	
@@ -45,8 +50,8 @@ class Data:
 
 	# Init method
 	def __init__(self):
-		#self.boolean_filter()
-		pass
+		self.boolean_filter()
+		#pass
 
 	# Function to save modified dataset as a new version of DataFrame
 	def save_file(self, df, directory_path, data_path):
@@ -69,7 +74,7 @@ class Data:
 		df.replace(to_replace ="no", value = 0, inplace = True)
 
 		# saving file
-		self.save_file(df, self.initial_directory_path, self.initial_data_path)
+		self.save_file(df, self.boolean_filter_directory_path, self.boolean_filter_data_path)
 
 
 # Introducing NaNs
