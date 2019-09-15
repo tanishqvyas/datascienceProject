@@ -45,8 +45,8 @@ class Data:
 
 	# Init method
 	def __init__(self):
-		self.boolean_filter()
-
+		#self.boolean_filter()
+		pass
 
 	# Function to save modified dataset as a new version of DataFrame
 	def save_file(self, df, directory_path, data_path):
