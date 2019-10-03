@@ -43,8 +43,8 @@ class Data:
 	#Dividing the columns based on what operation needs to be applied
 	column_mean = ['Medu','Fedu','famrel','freetime','goout','health','traveltime']
 	column_median = ['studytime','famsup','failures','Dalc','Walc']
-	column_mode = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
-
+	
+	fill_columns = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
 
 
 
@@ -121,22 +121,34 @@ class Data:
 	def rep_NaN_median(self,df,col):
 		df.fillna(df.median()[col].round(0), inplace = True)
         
-	def rep_NaN_mode(self,df,col):
-		df.fillna(df.mode()[col], inplace = True)
+	#def rep_NaN_mode(self,df,col):
+	#	df.fillna(df.mode()[col], inplace = True)
+
+	def fill_data(self,df,col):
+		
+		df[col] = df[col].ffill(axis = 0)
+
         
     # Function to remove the NaNs
 	def replace_nan(self):
-        
-		# Creating Data Frame
+
+		#Creating Data Frame
 		df = pd.DataFrame(pd.read_csv(self.nan_data_path))
-        
-        #Calling rem_NaN functions 
+
+		#Calling rem_NaN functions
 		self.rep_NaN_mean(df,self.column_mean)
+		self.fill_data(df,self.fill_columns)
 		self.rep_NaN_median(df,self.column_median)
-		self.rep_NaN_mode(df,self.column_mode)
+
+		# Saving the new dataset
+		self.save_file(df,self.cleaned_directory_path,self.cleaned_data_path)
+
+		
         
-    	# Saving the new dataset
-		self.save_file(df, self.cleaned_directory_path, self.cleaned_data_path)
+        
+
+
+		
 
 	# Function to return Q1 Q2 or Q3
 	def get_quartile_value(self,data_list, n, quartile_ratio):
