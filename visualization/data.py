@@ -73,7 +73,10 @@ class Data:
 		# Replacing values
 		df.replace(to_replace ="yes", value = 1, inplace = True)
 		df.replace(to_replace ="no", value = 0, inplace = True)
-
+		df.replace(to_replace ="YES", value = 1, inplace = True)
+		df.replace(to_replace ="NO", value = 0, inplace = True)
+		df.replace(to_replace ="Yes", value = 1, inplace = True)
+		df.replace(to_replace ="No", value = 0, inplace = True)
 		# saving file
 		self.save_file(df, self.boolean_filter_directory_path, self.boolean_filter_data_path)
 
@@ -173,7 +176,7 @@ class Data:
 		return math.ceil(num_of_classes)
 
 
-	# Pre-requisites for plotters>>>>>>>>>
+	# Pre-requisites for plotters>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 	# Functon to save the visulizaton graphs
 	def save_plot(self):
@@ -201,7 +204,7 @@ class Data:
 
 		return label_set, label_count
 
-	# Graph plotters>>>>>>>>>>>
+	# Graph plotters>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	# Function to plot pie-chart
 	def plot_piechart(self, column_title, title):
@@ -220,7 +223,7 @@ class Data:
 		plt.show()
 
 	# Functon to plot bar graph
-	def plot_bargraph(self, column_title, title, xlabel, ylabel, isVertcal = False):
+	def plot_bargraph(self, column_title, title, xlabel, ylabel, isVertical = False):
 
 		# Pre processing
 		data_list = self.fetch_col(column_title)
@@ -231,7 +234,7 @@ class Data:
 		# To use template styling
 		plt.style.use('seaborn')
 
-		if not isVertcal:
+		if not isVertical:
 			plt.barh(label_set, label_count)
 			plt.ylabel(xlabel)
 			plt.xlabel(ylabel)
@@ -239,11 +242,9 @@ class Data:
 			plt.bar(label_set, label_count)
 			plt.xlabel(xlabel)
 			plt.ylabel(ylabel)
-
-
 		
 		plt.title(title)
-		#some padding it seems
+		# some padding it seems
 		plt.tight_layout()
 		plt.show()
 
@@ -255,7 +256,7 @@ class Data:
 		# Pre processing
 		data_list = self.fetch_col(column_title)
 		
-		#  Fnding num of bins
+		# Fnding num of bins
 		num_of_bins = self.get_count_classes(data_list)
 
 		# To use template styling
@@ -276,18 +277,58 @@ class Data:
 	# Functon to plot Scatter Plot
 	def plot_scatterPlot(self, column_title1, column_title2, title, xlabel, ylabel):
 
-		#pre processing
+		# Pre processing
 		data_list1 = self.fetch_col(column_title1)
 		data_list2 = self.fetch_col(column_title2)
 
 
-		# plotting
+		# Plotting
 		plt.scatter(data_list1, data_list2, color='r')
 		plt.title(title)
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
 		plt.show()
 			
+
+	def plot_boxPlot(self, fieldList, title, xlabel, ylabel, isVertical=True):
+
+		#Test
+		print(plt.style.available)
+
+		# Empty list to hold column data
+		dataList = []
+
+		# Loop to fetch column data and append in dataList
+		for i in range(len(fieldList)):
+			dataList.append(self.fetch_col(fieldList[i]))
+		
+		"""
+		showfliers : boolean, true to show outliers
+		flierprops : styling for outliers markers
+		notch : boolean, true to show Notch at Q2
+		vert : boolean, true for vertical box plot
+		"""
+
+		# Plot related stuff
+		plt.style.use("seaborn-dark")
+		fig1, myPlot = plt.subplots()
+		#myPlot.set_title(title)
+		plt.title(title)
+
+		# Label management
+		plt.xlabel(xlabel)
+		plt.ylabel(ylabel)
+
+		if not isVertical:
+			plt.xlabel(ylabel)
+			plt.ylabel(xlabel)
+		
+		# Plotting and showing
+		myPlot.boxplot(dataList, notch=False, showfliers=True, vert=isVertical, labels=fieldList)
+		plt.show()
+		# Save the figure
+		#fig.savefig('fig1.png', bbox_inches='tight')
+
 
 
 """
@@ -308,7 +349,9 @@ Todo
 6. Defne Scatter Plot function
 
 7. Defne path to the folder to save plots
-8. Refactor code to overwrte files nstead of deleting folders
+8. Refactor code to overwrte files instead of deleting folders
+9. Make box-plots
+10. Normalize the data
 """
 
 
