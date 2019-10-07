@@ -395,7 +395,7 @@ class Data:
 				
 				# SAVING OUR MODEL
 				# Although it doesn't really makes sense to save it because it doesn't really take more than a second to train
-				# But we are gonna save the best one we find
+				# But we are gonna save the best one we find for future use
 				
 				if accuracy > self.current_accuracy:
 					self.current_accuracy = accuracy
@@ -423,8 +423,8 @@ class Data:
 		# Getting the corelation graph
 		plt.style.use("ggplot")
 		plt.scatter(test_target, predicted_values)
-		plt.xlabel("G1")
-		plt.ylabel("G2")
+		plt.xlabel("G3 Actual")
+		plt.ylabel("G3 Predicted")
 		plt.show()
 
 
