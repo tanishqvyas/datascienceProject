@@ -7,8 +7,18 @@ import shutil
 import math
 import matplotlib.pyplot as plt
 import scipy.stats as ss
+import sklearn
+from sklearn import linear_model
+from sklearn.utils import shuffle
+import pickle
 
 class Data:
+
+	# Variable to state how much % of data is to be taken as testing data
+	testSize = 0.1
+
+	# Variable to keep track of accuracy
+	current_accuracy = 0;
 
 	# Class variables >>>>
 	filename = "student-por.csv"
@@ -46,6 +56,10 @@ class Data:
 	
 	fill_columns = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
 
+
+	# List of columns on which analysis is to be performed
+	#analysis_list1 = ['G3','G2','G1','traveltime','studytime','freetime']
+	#analysis_list2 = ['G3','G2','G1','Dalc','Walc','goout']
 
 
 
@@ -342,6 +356,77 @@ class Data:
 		#fig.savefig('fig1.png', bbox_inches='tight')
 
 
+	def buildTrainSavePredictModel(self, analysis_list, predict, wannaTrain=0):
+
+		# Reading the data from csv
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+
+		# Trimming the columns which aren't required
+		# analysis_list is the list of columns taken for analysis
+		df = df[analysis_list]
+
+		# Separating our target field and features
+		attributes = np.array(df.drop([predict], 1))
+		target = np.array(df[predict])
+
+		# Splitting the dataset into testing and training data
+		train_attributes, test_attributes, train_target, test_target = sklearn.model_selection.train_test_split(attributes,target,test_size=self.testSize)
+
+
+		if wannaTrain:		
+
+			for i in range(10000):
+				
+				# Creating the Linear Regression model
+				predictorModel = linear_model.LinearRegression()
+
+				# Getting the least square fit line
+				predictorModel.fit(train_attributes, train_target) # obtaining least square line as model
+
+				# Predicting the target values for the testing data once we have obtained our least square line
+				# The function returns the accuracy score based on the generated values
+				accuracy = predictorModel.score(test_attributes, test_target)
+
+				# printing the accuracy, y-intercept and (slope for all the fields since its not a 2D plot)
+				#print(accuracy)
+				#print("Slope : ",predictorModel.coef_)
+				#print("Y-Intercept :",predictorModel.intercept_)
+
+				
+				# SAVING OUR MODEL
+				# Although it doesn't really makes sense to save it because it doesn't really take more than a second to train
+				# But we are gonna save the best one we find
+				
+				if accuracy > self.current_accuracy:
+					self.current_accuracy = accuracy
+					with open("gradePredictorModel.pickle","wb") as f:
+						pickle.dump(predictorModel, f)
+			
+
+
+		# Loading our model from our pickle file
+		load_model = open("gradePredictorModel.pickle","rb")
+		predictorModel = pickle.load(load_model)
+
+		# Printing predicted value, Input data, Actual Value>>>>>>>>>>>>>>>>
+
+		#Getting the predictions value
+		predicted_values = predictorModel.predict(test_attributes)
+
+		for i in range(len(predicted_values)):
+
+			#print("Predicted : ", math.round(predicted_values[i])," Input data :", test_attributes[i], "   Actual Value : ",test_target[i])
+			print("Predicted : ",int(round(predicted_values[i])), "   Actual Value : ",test_target[i])
+
+		#print(self.current_accuracy) #activate this line when wannaTrain is 1
+
+		# Getting the corelation graph
+		plt.style.use("ggplot")
+		plt.scatter(test_target, predicted_values)
+		plt.xlabel("G1")
+		plt.ylabel("G2")
+		plt.show()
+
 
 """
 Todo
@@ -355,7 +440,7 @@ Todo
 	- Add legends
 
 5. Bar Graphs
-	- Fix y axis scale representaton for horzontal and vice versa
+	- Fix y axis scale representaton for horizontal and vice versa
 	- Add legends
 
 6. Defne Scatter Plot function
@@ -364,6 +449,7 @@ Todo
 8. Refactor code to overwrte files instead of deleting folders
 9. Make box-plots
 10. Normalize the data
+11. Styling and outliers in boxplot got fucked cause of order fix that
 """
 
 
