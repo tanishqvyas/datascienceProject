@@ -9,9 +9,11 @@ import matplotlib.pyplot as plt
 import scipy.stats as ss
 import sklearn
 from sklearn import linear_model
+from sklearn import preprocessing
 from sklearn.utils import shuffle
 import pickle
-
+from scipy.stats import zscore
+from scipy.stats import norm
 class Data:
 
 	# Variable to state how much % of data is to be taken as testing data
@@ -39,6 +41,13 @@ class Data:
 	cleaned_directory_path = os.path.join("visualization","student","cleaned")
 	cleaned_data_path = os.path.join(cleaned_directory_path,filename)
 
+	#Normalized data & directory path
+	normalized_directory_path = os.path.join("visualization","student","normalized")
+	normalized_data_path = os.path.join(normalized_directory_path,filename)
+
+	standardized_directory_path = os.path.join("visualization","student","standardized")
+	standardized_data_path = os.path.join(standardized_directory_path,filename)
+
 	# Path of folder to save plots
 	plot_directory_path = os.path.join("visualization","student","Plots")
 	
@@ -53,8 +62,8 @@ class Data:
 	#Dividing the columns based on what operation needs to be applied
 	column_mean = ['Medu','Fedu','famrel','freetime','goout','health','traveltime']
 	column_median = ['studytime','famsup','failures','Dalc','Walc']
-	
 	fill_columns = ['famsize','internet','guardian','Pstatus','reason','romantic','Fjob','Mjob']
+	column_normalize = ['Medu','Fedu','traveltime','studytime','failures','famrel','famsup','freetime','Dalc','Walc','absences','G1','G2','G3']
 
 
 	# List of columns on which analysis is to be performed
@@ -66,6 +75,7 @@ class Data:
 	# Init method
 	def __init__(self):
 		self.boolean_filter()
+		
 		#pass
 
 	# Function to save modified dataset as a new version of DataFrame
@@ -77,6 +87,32 @@ class Data:
 		os.mkdir(directory_path) # making new directory to save newversion
 		df.to_csv(data_path,index = False)
 		print("done")
+
+
+
+	#Function to scale down data to lie between 0 and 1
+	def normalize(self,df,col):
+		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
+		scaler = preprocessing.MinMaxScaler(feature_range(0,1))
+		for col in column_normalize:
+			df[col] = scaler.fit_transform(df[col])
+
+		self.normalize(df,self.column_normalize)
+
+		#Saving normalized dataset
+		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
+	
+
+	#Standardize data by replacing with z scores such that mean = 0 and variance = 1
+	def standardize(self,df,col):
+		df = pd.DataFrame(pd.read_csv(self.normalized_data_path))
+		standardscaler = preprocessing.StandardScaler()
+		for col in column_normalize:
+			df[col] = standardscaler.fit_transform(df[col])
+
+		#Saving standardized dataset
+		self.save_file(standardized_df,self.standardized_directory_path,self.standardized_data_path)
+
 
 	# Function to replace yes with 1 and no with 0 respectively
 	def boolean_filter(self):
@@ -122,7 +158,7 @@ class Data:
 		self.add_nan(df,self.column_list1,self.percentage_nan[0])
 		self.add_nan(df,self.column_list2,self.percentage_nan[1])
 		self.add_nan(df,self.column_list3,self.percentage_nan[2])
-
+			
 		# Filling NaN
 		df.fillna("NaN", inplace = True)
 
@@ -157,15 +193,12 @@ class Data:
 		self.fill_data(df,self.fill_columns)
 		self.rep_NaN_median(df,self.column_median)
 
+
 		# Saving the new dataset
 		self.save_file(df,self.cleaned_directory_path,self.cleaned_data_path)
 
-		
-        
-        
 
 
-		
 
 	# Function to return Q1 Q2 or Q3
 	def get_quartile_value(self,data_list, n, quartile_ratio):
@@ -452,6 +485,7 @@ Todo
 11. Styling and outliers in boxplot got fucked cause of order fix that
 """
 
+	
 
 
 
