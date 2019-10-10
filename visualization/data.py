@@ -11,6 +11,8 @@ import sklearn
 from sklearn import linear_model
 from sklearn.utils import shuffle
 import pickle
+import statistics as stat
+from scipy.stats import zscore, norm, binom, poisson
 
 class Data:
 
@@ -355,6 +357,87 @@ class Data:
 		# Save the figure
 		#fig.savefig('fig1.png', bbox_inches='tight')
 
+	# TOOOOOOOOOOOOOOOOOOOOOOooo-DOOOOOOOOOOOOOOOOOOOOOOOOOOO
+	def plot_normalProbabilityPlot(self,column):
+
+		data = self.fetch_col(column)
+
+		# Sorting the data
+		data = sorted(data);
+
+		# making something
+		modified_list = [(data.index(i)-0.5)/ len(data) for i in data]
+
+		# getting zscore list
+		zscore_list = zscore(modified_list)
+
+		# plotting scatter plot
+		plt.scatter(data, zscore_list)
+
+		plt.show()
+
+
+		data_modified = np.array(data)
+
+		mu = stat.mean(data_modified)	
+		sigma = stat.stdev(data_modified)
+
+		#cdf function also exists
+
+		Q = norm.ppf(data_modified)*sigma + mu
+		
+		plt.plot(data, Q)
+		#plt.plot(data, data)
+
+		plt.show()
+
+
+	def binomial_distribution(self, n, p):
+
+		pmf = []
+
+		for x in range(n+1):
+
+			pmf.append(binom.pmf(x, n, p))
+
+		for i in range(n+1):
+
+			print(i, "\t\t", pmf[i])
+
+		plt.bar(range(n+1), pmf, width=1)
+		plt.show()
+
+
+	def poisson(self, rate, a, b, x1, x2):
+
+		# rate at which events are happening
+		# a, b is the min and max range
+		# x1 and x2 k beech me hone ki probab kitti hai
+
+
+		x = np.arange(a, b, 1) # step len = 1
+
+		z = np.arange(a, b, 1/20)
+
+		plt.bar(x, poisson.pmf(x, rate), fill = False)
+		plt.plot(z, norm.pdf(z, rate, math.sqrt(rate)))
+
+		section = np.arange(x1, x2, 1.)
+		plt.fill_between(section, poisson.pmf(section, rate))
+		plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	def buildTrainSavePredictModel(self, analysis_list, predict, wannaTrain=0):
 
@@ -375,7 +458,7 @@ class Data:
 
 		if wannaTrain:		
 
-			for i in range(10000):
+			for i in range(1000000):
 				
 				# Creating the Linear Regression model
 				predictorModel = linear_model.LinearRegression()
@@ -399,9 +482,10 @@ class Data:
 				
 				if accuracy > self.current_accuracy:
 					self.current_accuracy = accuracy
-					with open("gradePredictorModel.pickle","wb") as f:
-						pickle.dump(predictorModel, f)
-			
+					# wb stating writing bytes
+					pickle_file_obj = open("gradePredictorModel.pickle","wb")
+					pickle.dump(predictorModel, pickle_file_obj)
+					pickle_file_obj.close()
 
 
 		# Loading our model from our pickle file
@@ -418,7 +502,7 @@ class Data:
 			#print("Predicted : ", math.round(predicted_values[i])," Input data :", test_attributes[i], "   Actual Value : ",test_target[i])
 			print("Predicted : ",int(round(predicted_values[i])), "   Actual Value : ",test_target[i])
 
-		#print(self.current_accuracy) #activate this line when wannaTrain is 1
+		print(self.current_accuracy) #activate this line when wannaTrain is 1
 
 		# Getting the corelation graph
 		plt.style.use("ggplot")

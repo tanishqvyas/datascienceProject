@@ -20,4 +20,10 @@ data.replace_nan()
 #data.plot_histogram("G1","Marks Distro", "Marks", "Num of Students")
 #data.plot_bargraph("traveltime","traveltme", "time", "Num of Students")
 #data.plot_scatterPlot("G1","G2","This is dotted broo","G1","G2")
-data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",0)
+#data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",1)
+
+
+#####data.plot_normalProbabilityPlot("G2")
+#####data.binomial_distribution(50,0.9)
+#####data.poisson(27, 5, 100, 20, 60)
+
