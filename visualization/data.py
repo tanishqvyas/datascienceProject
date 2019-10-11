@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as ss
 import sklearn
 from sklearn import linear_model
-from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.utils import shuffle
 import pickle
 
@@ -93,8 +93,36 @@ class Data:
 
 
 
-	#Function to scale down data to lie between 0 and 1
-	def normalize(self,df,col):
+	# Function to scale down data to lie between 0 and 1
+	def normalize(self,column_list):
+	
+		# reading the dataset
+		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
+
+		# creating scaler object
+		scaler = MinMaxScaler()
+
+		# code to do the normalization of all columns in the list
+		for column in column_list:
+			max_ele = max(df[column])
+			
+
+			#for item in range(len(df[column])):
+			#	#df.at[item, column] =  df[column][item] / max_ele
+
+			
+
+			
+			scaler.fit([df[column]])
+			#df[column] = scaler.fit_transform([df[column]])[0]
+			print(scaler.transform([df[column]])[0])
+			#print(scaler.fit_transform([df[column]]))
+			#print(scaler.transform([ df[column] ] ))
+			#print(df[column])
+		# saving normalized dataset
+		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
+
+		"""
 		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
 		scaler = preprocessing.MinMaxScaler(feature_range(0,1))
 		for col in column_normalize:
@@ -104,14 +132,18 @@ class Data:
 
 		#Saving normalized dataset
 		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
-	
+		"""
 
 	#Standardize data by replacing with z scores such that mean = 0 and variance = 1
-	def standardize(self,df,col):
+	def standardize(self,col):
+		
+		"""
 		df = pd.DataFrame(pd.read_csv(self.normalized_data_path))
-		standardscaler = preprocessing.StandardScaler()
+		standardscaler = StandardScaler()
 		for col in column_normalize:
 			df[col] = standardscaler.fit_transform(df[col])
+		"""
+
 
 		#Saving standardized dataset
 		self.save_file(standardized_df,self.standardized_directory_path,self.standardized_data_path)
