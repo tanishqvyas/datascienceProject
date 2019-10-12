@@ -411,43 +411,45 @@ class Data:
 		# Plotting and showing
 		myPlot.boxplot(dataList, notch=False, showfliers=True, vert=isVertical, labels=fieldList)
 		plt.show()
-		# Save the figure
-		#fig.savefig('fig1.png', bbox_inches='tight')
+		
 
 	# TOOOOOOOOOOOOOOOOOOOOOOooo-DOOOOOOOOOOOOOOOOOOOOOOOOOOO
-	def plot_normalProbabilityPlot(self,column):
+	def plot_normalProbabilityPlot(self,column_list, title, xlabel, ylabel):
 
-		data = self.fetch_col(column)
+		for column in column_list:
 
-		# Sorting the data
-		data = sorted(data);
+			data = self.fetch_col(column)
 
-		# making something
-		modified_list = [(data.index(i)-0.5)/ len(data) for i in data]
+			# Sorting the data
+			data = sorted(data);
 
-		# getting zscore list
-		zscore_list = zscore(modified_list)
-
-		# plotting scatter plot
-		plt.scatter(data, zscore_list)
-
-		plt.show()
+			# finding mean and standard deviation
+			col_mean = np.mean(data)
+			col_std = np.std(data)
 
 
-		data_modified = np.array(data)
+			# Finding the P value i.e.  P = (position - 0.5)/len of data
+			# modified list essentially contains values randing from 0 - 1
+			modified_list = [(data.index(i) + 1 -0.5)/ len(data) for i in data]
 
-		mu = stat.mean(data_modified)	
-		sigma = stat.stdev(data_modified)
+			# getting zscore list for the list of P
+			zscore_list = zscore(modified_list)
 
-		#cdf function also exists
+			# Finding theoretical Quantile for each value in zscore_list
+			theoretical_quantile_list = [ (col_std*z) + col_mean  for z in zscore_list]
 
-		Q = norm.ppf(data_modified)*sigma + mu
+			# Plotting labels and stuff
+			plt.title(title)
+			plt.xlabel(xlabel)
+			plt.ylabel(ylabel)
+
+			# plotting scatter plot
+			plt.scatter(theoretical_quantile_list, zscore_list)
+
+			plt.show()
+
+
 		
-		plt.plot(data, Q)
-		#plt.plot(data, data)
-
-		plt.show()
-
 
 	def binomial_distribution(self, n, p):
 

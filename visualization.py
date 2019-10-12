@@ -21,14 +21,21 @@ data.replace_nan()
 #data.plot_bargraph("traveltime","traveltme", "time", "Num of Students")
 #data.plot_scatterPlot("G1","G2","This is dotted broo","G1","G2")
 
+# Normalizing columns
+data.normalize(["G1", "G2"], 20)
+
+# Standardizing columns
+data.standardize(["G1", "G2"])
+
+# Plottting Normal Probability Plot
+data.plot_normalProbabilityPlot(["G1", "G2"],"Normal Probability Plot for Test Scores","Theoretical Quantile","Z-score")
+
+
+
+
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>LEAVE THE SECTION BELOW>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",1)
 #####data.plot_normalProbabilityPlot("G2")
 #####data.binomial_distribution(50,0.9)
 #####data.poisson(27, 5, 100, 20, 60)
 
-# Normalizing columns
-data.normalize(["G1","G2"], 20)
-
-# Standardizing columns
-data.standardize(["G1","G2"])
