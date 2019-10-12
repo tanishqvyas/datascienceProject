@@ -15,11 +15,11 @@ data = manipulator.Data()
 # Introducing and replacing NaNs
 data.introduce_nan()
 data.replace_nan()
-data.plot_boxPlot(["G1","G2"],"title ye rha bhai","xlabel bhi lele", "ha y bhi le hi le", True)
-data.plot_piechart("guardian","Skadoosh")
-data.plot_histogram("G1","Marks Distro", "Marks", "Num of Students")
-data.plot_bargraph("traveltime","traveltme", "time", "Num of Students")
-data.plot_scatterPlot("G1","G2","This is dotted broo","G1","G2")
+#data.plot_boxPlot(["G1","G2"],"title ye rha bhai","xlabel bhi lele", "ha y bhi le hi le", True)
+#data.plot_piechart("guardian","Skadoosh")
+#data.plot_histogram("G1","Marks Distro", "Marks", "Num of Students")
+#data.plot_bargraph("traveltime","traveltme", "time", "Num of Students")
+#data.plot_scatterPlot("G1","G2","This is dotted broo","G1","G2")
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>LEAVE THE SECTION BELOW>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",1)
@@ -28,4 +28,4 @@ data.plot_scatterPlot("G1","G2","This is dotted broo","G1","G2")
 #####data.poisson(27, 5, 100, 20, 60)
 
 
-#data.normalize(["G1"])
+data.normalize(["G1","G2"], 20)

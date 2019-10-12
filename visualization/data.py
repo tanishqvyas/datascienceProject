@@ -1,5 +1,9 @@
 # This file contains the Data extractor and visualization class
 
+def debug(x="debugging"):
+	print(x)
+
+
 import numpy as np
 import pandas as pd
 import os
@@ -9,7 +13,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as ss
 import sklearn
 from sklearn import linear_model
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn import preprocessing
 from sklearn.utils import shuffle
 import pickle
 
@@ -94,45 +98,31 @@ class Data:
 
 
 	# Function to scale down data to lie between 0 and 1
-	def normalize(self,column_list):
+	def normalize(self,column_list, max_value = 20):
 	
 		# reading the dataset
 		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
 
-		# creating scaler object
-		scaler = MinMaxScaler()
-
 		# code to do the normalization of all columns in the list
 		for column in column_list:
-			max_ele = max(df[column])
-			
 
-			#for item in range(len(df[column])):
-			#	#df.at[item, column] =  df[column][item] / max_ele
+			# Setting max marks
+			max_marks = max_value
+
+			# scaling the values to a range of 0 - 1
+			scaled_values = []# list to store scaled values
+
+			# looping through the values and finding what % are they of max marks 
+			for item in range(len(df[column])):
+				scaled_values.append(df[column][item] / max_marks)
+
+			# updating the column with scaled_values,    here df[column] will be saved back in case first argument is 0 
+			df[column] = np.where(1,scaled_values, df[column])
 
 			
-
-			
-			scaler.fit([df[column]])
-			#df[column] = scaler.fit_transform([df[column]])[0]
-			print(scaler.transform([df[column]])[0])
-			#print(scaler.fit_transform([df[column]]))
-			#print(scaler.transform([ df[column] ] ))
-			#print(df[column])
 		# saving normalized dataset
 		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
 
-		"""
-		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
-		scaler = preprocessing.MinMaxScaler(feature_range(0,1))
-		for col in column_normalize:
-			df[col] = scaler.fit_transform(df[col])
-
-		self.normalize(df,self.column_normalize)
-
-		#Saving normalized dataset
-		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
-		"""
 
 	#Standardize data by replacing with z scores such that mean = 0 and variance = 1
 	def standardize(self,col):
