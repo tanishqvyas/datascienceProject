@@ -98,7 +98,7 @@ class Data:
 
 
 	# Function to scale down data to lie between 0 and 1
-	def normalize(self,column_list, max_value = 20):
+	def normalize(self, column_list, max_value = 20):
 	
 		# reading the dataset
 		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
@@ -124,19 +124,20 @@ class Data:
 		self.save_file(df,self.normalized_directory_path,self.normalized_data_path)
 
 
-	#Standardize data by replacing with z scores such that mean = 0 and variance = 1
-	def standardize(self,col):
+	# Standardize data by replacing with z scores such that mean = 0 and variance = 1
+	def standardize(self, column_list):
 		
-		"""
-		df = pd.DataFrame(pd.read_csv(self.normalized_data_path))
-		standardscaler = StandardScaler()
-		for col in column_normalize:
-			df[col] = standardscaler.fit_transform(df[col])
-		"""
+		# reading the dataset
+		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
 
+		# code to do the standardization of all columns in the list
+		for column in column_list:
+
+			# updating the column with zscores 
+			df[column] = np.where(1, zscore(df[column]), df[column])
 
 		#Saving standardized dataset
-		self.save_file(standardized_df,self.standardized_directory_path,self.standardized_data_path)
+		self.save_file(df,self.standardized_directory_path,self.standardized_data_path)
 
 
 	# Function to replace yes with 1 and no with 0 respectively

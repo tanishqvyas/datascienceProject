@@ -27,5 +27,8 @@ data.replace_nan()
 #####data.binomial_distribution(50,0.9)
 #####data.poisson(27, 5, 100, 20, 60)
 
-
+# Normalizing columns
 data.normalize(["G1","G2"], 20)
+
+# Standardizing columns
+data.standardize(["G1","G2"])
