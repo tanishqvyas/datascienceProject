@@ -13,7 +13,7 @@ Fork the repository by clicking on the fork button on top right
 Step 2
 Copy the repository url and go to the command line and type the following command
 
-git clone <url>
+git clone copied-url
   
 Step 3
 change your directory to datascienceProject
