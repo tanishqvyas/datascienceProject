@@ -7,18 +7,18 @@ A Linear Regression model to predict the final test scores for the given student
 ---
 # Setting up the project
 
-Step 1
+Step 1 : 
 Fork the repository by clicking on the fork button on top right
 
-Step 2
+Step 2 : 
 Copy the repository url and go to the command line and type the following command
 
 git clone copied-url
   
-Step 3
+Step 3 : 
 change your directory to datascienceProject
 
-Step 4
+Step 4 : 
 run the following command
 
 python3 visualization.py
