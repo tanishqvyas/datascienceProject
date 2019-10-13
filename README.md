@@ -11,7 +11,7 @@ Step 1 :
 Fork the repository by clicking on the fork button on top right
 
 Step 2 : 
-Copy the repository url and go to the command line and type the following command
+Copy the forked repository's url and go to the command line and type the following command
 
 git clone copied-url
   
