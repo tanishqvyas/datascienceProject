@@ -30,11 +30,12 @@ data.standardize(["G1", "G2"])
 # Plottting Normal Probability Plot
 data.plot_normalProbabilityPlot(["G1", "G2"],"Normal Probability Plot for Test Scores","Theoretical Quantile","Z-score")
 
+# Building simple model and predicting the Final grades
+data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",1, "TravelStudyFreeModel")
 
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>LEAVE THE SECTION BELOW>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3",1)
 #####data.plot_normalProbabilityPlot("G2")
 #####data.binomial_distribution(50,0.9)
 #####data.poisson(27, 5, 100, 20, 60)

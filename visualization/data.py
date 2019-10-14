@@ -32,6 +32,9 @@ class Data:
 	# Class variables >>>>
 	filename = "student-por.csv"
 
+	# Regression Model Path
+	model_directory_path = os.join("models")
+
 	# Initial data path
 	initial_directory_path = os.path.join("visualization","student","initial")
 	initial_data_path = os.path.join(initial_directory_path,filename)
@@ -498,7 +501,7 @@ class Data:
 
 
 
-	def buildTrainSavePredictModel(self, analysis_list, predict, wannaTrain=0):
+	def buildTrainSavePredictModel(self, analysis_list, predict, wannaTrain=0, model_name):
 
 		# Reading the data from csv
 		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
@@ -542,7 +545,7 @@ class Data:
 				if accuracy > self.current_accuracy:
 					self.current_accuracy = accuracy
 					# wb stating writing bytes
-					pickle_file_obj = open("gradePredictorModel.pickle","wb")
+					pickle_file_obj = open(model_name,"wb")
 					pickle.dump(predictorModel, pickle_file_obj)
 					pickle_file_obj.close()
 
