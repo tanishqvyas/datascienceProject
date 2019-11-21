@@ -9,6 +9,7 @@ import pandas as pd
 import os
 import shutil
 import math
+from math import sqrt
 import matplotlib.pyplot as plt
 import scipy.stats as ss
 import sklearn
@@ -33,7 +34,7 @@ class Data:
 	filename = "student-por.csv"
 
 	# Regression Model Path
-	model_directory_path = os.join("models")
+	model_directory_path = os.path.join("models")
 
 	# Initial data path
 	initial_directory_path = os.path.join("visualization","student","initial")
@@ -491,6 +492,66 @@ class Data:
 
 
 
+	def hypothesis(self):
+
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+
+		f_min = 0; f_max = 19 ;m_min = 0 ;m_max = 19
+
+		df_rank = df.groupby('sex')
+		df_rank_size = df_rank.size()
+
+
+		number_of_males = df_rank_size[0]
+		number_of_females = df_rank_size[1]
+
+		print("no: of males:",number_of_males,"no: of females:",number_of_females)
+		print(" ")
+
+		group_parameters = df_rank['G3'].agg(['mean', 'median', 
+		                                  'std','var', 'min', 'max']).reset_index()
+		print(group_parameters)
+		print(" ")
+
+
+		df_rank_means = df_rank['G3'].agg(['mean'])
+		df_rank_std = df_rank['G3'].agg(['std'])
+		df_rank_var = df_rank['G3'].agg(['var'])
+		df_rank_min = df_rank['G3'].agg(['min'])
+		df_rank_max = df_rank['G3'].agg(['max'])
+
+
+
+
+		f_mean = df_rank_means['mean'][0]
+		m_mean = df_rank_means['mean'][1]
+
+		f_std = df_rank_std['std'][0]
+		m_std = df_rank_std['std'][1]
+
+		f_variance = df_rank_var['var'][0]
+		m_variance = df_rank_var['var'][1]
+
+		print("Chosen hypothesis")
+		print("H0 : f_mean - m_mean >= 0")
+		print("H1 : f_mean - m_mean < 0 - so left tailed")
+		print(" ")
+
+		#ppf(x) gives the z score of the area x. cdf is the opposite, so it gives area for z-score
+		alpha = 0.05
+		print("Our chosen significance level is 5% and our confidence level is 95%")
+
+		diff_mean = f_mean - m_mean
+		diff_variance = (f_variance)/number_of_females + m_variance/number_of_males
+		diff_std = sqrt(diff_variance)
+
+		#What should be taken as n? Total number of students?
+		z1 = (0-diff_mean)/diff_std
+
+		area1 = norm.cdf(z1)
+		print(area1)
+		print(" ")
+		print("Since P is found to be <<0.05, H0 can be rejected and H1 can be accepted")
 
 
 
@@ -501,7 +562,7 @@ class Data:
 
 
 
-	def buildTrainSavePredictModel(self, analysis_list, predict, wannaTrain=0, model_name):
+	def buildTrainSavePredictModel(self, analysis_list, predict, model_name, wannaTrain=0):
 
 		# Reading the data from csv
 		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
