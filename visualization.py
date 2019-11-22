@@ -24,10 +24,10 @@ data.replace_nan()
 
 
 # Graphs
-#data.plot_piechart("sex","Gender Distribution")
+data.plot_piechart("sex","Gender Distribution")
 #data.plot_scatterPlot("sex","G3","Marks vs Gender","Sex","G3")
-data.plot_histogram("G3","Marks Distribution", "Marks", "Num of Students")
-data.plot_boxPlot(["G1","G2", "G3"],"Box plot for Marks for different tests","x label", "ha y bhi le hi le", True)
+data.plot_histogram("G3","Marks Distribution", "Marks For G3", "Num of Students")
+data.plot_boxPlot(["G1","G2", "G3"],"Box plot for Marks for different tests","Exams G1, G2 and G3", "Marks", True)
 data.plot_scatterPlot("traveltime","G3","Travel time in Hrs vs Marks","Travel Time in Hrs","Marks in G3")
 
 
@@ -36,7 +36,7 @@ data.plot_scatterPlot("traveltime","G3","Travel time in Hrs vs Marks","Travel Ti
 
 
 # Normalizing columns
-data.normalize(["G1", "G2"], 20)
+data.normalize(["G1", "G2", "G3"], 20)
 
 # Standardizing columns
 data.standardize(["G1", "G2"])

@@ -185,7 +185,7 @@ class Data:
 	def introduce_nan(self):
 	
 		# Creating Data Frame
-		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+		df = pd.DataFrame(pd.read_csv(self.boolean_filter_data_path))
 		
 		# Calling add_nan function to modify 3 lists of columns
 		self.add_nan(df,self.column_list1,self.percentage_nan[0])
@@ -278,7 +278,7 @@ class Data:
 	def fetch_col(self, column_title):
 		
 		#change >>>> filepath
-		df = pd.DataFrame(pd.read_csv(self.boolean_filter_data_path))
+		df = pd.DataFrame(pd.read_csv(self.cleaned_data_path))
 
 		# Convertingthe df column to list
 		store_list = list(df[column_title].tolist())
@@ -512,13 +512,13 @@ class Data:
 
 		"""
 
-		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+		df = pd.DataFrame(pd.read_csv(self.normalized_data_path))
 
 		print(df.corr(method = 'pearson'))
 
 	def hypothesis(self):
 
-		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+		df = pd.DataFrame(pd.read_csv(self.normalized_data_path))
 
 		f_min = 0; f_max = 19 ;m_min = 0 ;m_max = 19
 
