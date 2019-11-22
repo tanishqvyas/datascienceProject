@@ -18,6 +18,10 @@ from sklearn import preprocessing
 from sklearn.utils import shuffle
 import pickle
 
+
+from numpy.random import randn
+from scipy.stats import pearsonr
+
 import statistics as stat
 from scipy.stats import zscore, norm, binom, poisson
 
@@ -97,7 +101,6 @@ class Data:
 
 		os.mkdir(directory_path) # making new directory to save newversion
 		df.to_csv(data_path,index = False)
-		print("done")
 
 
 
@@ -275,7 +278,7 @@ class Data:
 	def fetch_col(self, column_title):
 		
 		#change >>>> filepath
-		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+		df = pd.DataFrame(pd.read_csv(self.boolean_filter_data_path))
 
 		# Convertingthe df column to list
 		store_list = list(df[column_title].tolist())
@@ -382,7 +385,7 @@ class Data:
 	def plot_boxPlot(self, fieldList, title, xlabel, ylabel, isVertical=True):
 
 		#Test
-		print(plt.style.available)
+		#print(plt.style.available)
 
 		# Empty list to hold column data
 		dataList = []
@@ -491,6 +494,27 @@ class Data:
 
 
 
+	def get_correlation_coefficient(self):
+
+		from numpy.random import randn
+		from numpy.random import seed
+		from scipy.stats import pearsonr
+
+
+		"""
+		data1 = self.fetch_col(column_list[0])
+		data2 = self.fetch_col(column_list[1])
+
+		# calculate Pearson's correlation
+		corr, _ = pearsonr(data1, data2)
+		print("Pearsons correlation : ", corr, "\n for Columns : ", column_list[0],"  &  ", column_list[1],"\n\n")
+
+
+		"""
+
+		df = pd.DataFrame(pd.read_csv(self.initial_data_path))
+
+		print(df.corr(method = 'pearson'))
 
 	def hypothesis(self):
 
@@ -502,14 +526,13 @@ class Data:
 		df_rank_size = df_rank.size()
 
 
-		number_of_males = df_rank_size[0]
-		number_of_females = df_rank_size[1]
+		number_of_males = df_rank_size[1]
+		number_of_females = df_rank_size[0]
 
 		print("no: of males:",number_of_males,"no: of females:",number_of_females)
 		print(" ")
 
-		group_parameters = df_rank['G3'].agg(['mean', 'median', 
-		                                  'std','var', 'min', 'max']).reset_index()
+		group_parameters = df_rank['G3'].agg(['mean', 'median', 'std','var', 'min', 'max']).reset_index()
 		print(group_parameters)
 		print(" ")
 
@@ -635,29 +658,6 @@ class Data:
 		plt.show()
 
 
-"""
-Todo
-
-0. Change file path from intial to cleaned once cleaning is done
-2. Define save_plot, to be done at the end
-3. Pie charts
-4. Histograms
-	- Add line plot feature on top of hist based on plotCurve's value
-	- Add a feature to plot it separately too if needed
-	- Add legends
-
-5. Bar Graphs
-	- Fix y axis scale representaton for horizontal and vice versa
-	- Add legends
-
-6. Defne Scatter Plot function
-
-7. Defne path to the folder to save plots
-8. Refactor code to overwrte files instead of deleting folders
-9. Make box-plots
-10. Normalize the data
-11. Styling and outliers in boxplot got fucked cause of order fix that
-"""
 
 	
 
