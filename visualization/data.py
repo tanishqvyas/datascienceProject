@@ -507,8 +507,7 @@ class Data:
 
 		# calculate Pearson's correlation
 		corr, _ = pearsonr(data1, data2)
-		print("Pearsons correlation : ", corr, "\n for Columns : ", column_list[0],"  &  ", column_list[1],"\n\n")
-
+		print("Pearsons correlation : ", corr, " for Columns : ", column_list[0],"  &  ", column_list[1],"")
 
 		"""
 
@@ -596,7 +595,7 @@ class Data:
 
 		# Separating our target field and features
 		attributes = np.array(df.drop([predict], 1))
-		target = np.array(df[predict])
+		target = np.array(df[predict[0]])
 
 		# Splitting the dataset into testing and training data
 		train_attributes, test_attributes, train_target, test_target = sklearn.model_selection.train_test_split(attributes,target,test_size=self.testSize)
@@ -617,9 +616,9 @@ class Data:
 				accuracy = predictorModel.score(test_attributes, test_target)
 
 				# printing the accuracy, y-intercept and (slope for all the fields since its not a 2D plot)
-				#print(accuracy)
-				#print("Slope : ",predictorModel.coef_)
-				#print("Y-Intercept :",predictorModel.intercept_)
+				print(accuracy)
+				print("Slope : ",predictorModel.coef_)
+				print("Y-Intercept :",predictorModel.intercept_)
 
 				
 				# SAVING OUR MODEL

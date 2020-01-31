@@ -45,7 +45,7 @@ data.standardize(["G1", "G2"])
 #data.plot_normalProbabilityPlot(["G1", "G2"],"Normal Probability Plot for Test Scores","Theoretical Quantile","Z-score")
 
 # Building simple model and predicting the Final grades
-#data.buildTrainSavePredictModel(['G3','G2','traveltime','studytime','freetime'],"G3", "TravelStudyFreeModel", 0)
+#data.buildTrainSavePredictModel(['G2'],"G3", "TravelStudyFreeModel", 0)
 
 
 # Get correlation coefficient for 2 columns
